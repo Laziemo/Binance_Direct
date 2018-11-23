@@ -1,0 +1,17 @@
+{
+  "name": "binance_direct",
+  "version": "0.0.1",
+  "description": "binance trade bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chart.js": "^2.7.3",
+    "fs": "0.0.1-security",
+    "node-cron": "^2.0.3",
+    "request": "^2.88.0"
+  }
+}
