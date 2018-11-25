@@ -178,20 +178,24 @@ let track = (ticker)=>{
 //===f(x)-=====================================================================|
 let buy = (time,price) =>{
   try{
+    if(muh_usdt>zero){
+      muh_btc+=(muh_usdt/price);
+      muh_usdt=zero;
 
-    muh_btc+=(muh_usdt/price);
-    muh_usdt=zero;
+      let object = {
+        "time": time,
+        "action":`Bought BTC @ ${price}`,
+        "BTC": muh_btc,
+      };
 
-    let object = {
-      "time": time,
-      "action":`Bought BTC @ ${price}`,
-      "BTC": muh_btc,
-    };
-
-    fs.appendFile('nba.log', `${JSON.stringify(object,null,1)}\n${line_break}\n`,
-    (err) => {
-      if (err) throw err;
-    });
+      fs.appendFile('nba.log', `${JSON.stringify(object,null,1)}\n${line_break}\n`,
+      (err) => {
+        if (err) throw err;
+      });
+    }
+    else{
+      console.log("Missed the boat.")
+    }
   }
   catch(e){
     console.log(`Error: ${e}`);
@@ -200,19 +204,24 @@ let buy = (time,price) =>{
 //===f(x)-=====================================================================|
 let sell = (time,price) =>{
   try{
-    muh_usdt+=(muh_btc*price);
-    muh_btc=zero;
+    if(muh_btc>zero){
+      muh_usdt+=(muh_btc*price);
+      muh_btc=zero;
 
-    let object = {
-      "time": time,
-      "action":`Sold BTC @ ${price}`,
-      "USDT": muh_usdt
-    };
+      let object = {
+        "time": time,
+        "action":`Sold BTC @ ${price}`,
+        "USDT": muh_usdt
+      };
 
-    fs.appendFile('nba.log', `${JSON.stringify(object,null,1)}\n${line_break}\n`,
-    (err) => {
-      if (err) throw err;
-    });
+      fs.appendFile('nba.log', `${JSON.stringify(object,null,1)}\n${line_break}\n`,
+      (err) => {
+        if (err) throw err;
+      });
+    }
+    else{
+      console.log("Missed the boat.")
+    }
   }
   catch(e){
     console.log(`Error: ${e}`);
