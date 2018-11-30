@@ -1,57 +1,91 @@
 
 <html>
 <head>
+<style>
+body{
+  background-color:  rgb(23,23,40) ;
+}
+</style>
+<canvas id="nba"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
 <script>
-window.onload = function() {
+let ctx = document.getElementById('nba').getContext('2d');
+Chart.defaults.global.defaultFontFamily = 'Courier';
+Chart.defaults.global.defaultFontColor = 'rgb(253, 255, 223)';
 
-var dataPoints = [];
+let chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+    // The data for our dataset
+    data: {
+        labels: [],
+        datasets: [{
+            label: "BTC/USDT",
+            borderColor: 'rgb(242, 233, 33)',
+            pointRadius: 5,
+            pointBorderColor: 'rgb( 33, 214, 242 )',
+            pointBorderWidth: 2,
+            pointHoverRadius: 11,
+            pointHoverBackgroundColor: 'rgb( 189, 240, 233, 0.5)',
+            data: [],
+        }]
+    },
+    // Configuration options go here
+    options: {
+        scales: {
+            yAxes: [{
+                scaleLabel:{
+                  display:true,
+                  labelString: "USDT",
+                  fontColor: 'rgb( 33, 214, 242 )',
+                  fontSize: 21
+                }
+            }],
+            xAxes: [{
+                scaleLabel:{
+                  display:true,
+                  labelString: "time",
+                  fontColor: 'rgb( 33, 214, 242 )',
+                  fontSize: 21
+                }
+            }]
+        },
+        title: {
+            display: true,
+            text: 'Live Binance Market Monitor',
+            fontColor: 'rgb( 251, 254, 194 )',
+            fontFamily: "Courier",
+            fontSize: 27
 
-var chart = new CanvasJS.Chart("chartContainer", {
-	theme: "light2",
-	title: {
-		text: "Live Data"
-	},
-	data: [{
-		type: "line",
-		dataPoints: dataPoints
-	}]
+        }
+    }
 });
-updateData();
 
-// Initial Values
-var xValue = 0;
-var yValue = 10;
-var newDataCount = 6;
-
-function addData(data) {
-	if(newDataCount != 1) {
-		$.each(data, function(key, value) {
-			dataPoints.push({x: value[0], y: parseInt(value[1])});
-			xValue++;
-			yValue = parseInt(value[1]);
-		});
-	} else {
-		//dataPoints.shift();
-		dataPoints.push({x: data[0][0], y: parseInt(data[0][1])});
-		xValue++;
-		yValue = parseInt(data[0][1]);
-	}
-
-	newDataCount = 1;
-	chart.render();
-	setTimeout(updateData, 1500);
+let addData=(chart, label, data)=>{
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
 }
 
-function updateData() {
-	$.getJSON("https://canvasjs.com/services/data/datapoints.php?xstart="+xValue+"&ystart="+yValue+"&length="+newDataCount+"type=json", addData+"callback=?");
-}
-
-}
 </script>
+
 </head>
+
+   <script src = "/socket.io/socket.io.js"></script>
+
+   <script>
+      let socket = io.connect('http://localhost:8989');
+      socket.on('price_set', (data)=>{
+        addData(chart,data.time,data.price);
+        //alert(`Logging from html document: ${data.time}: ${data.price}`);
+      });
+   </script>
+
 <body>
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
-<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
 </body>
 </html>
