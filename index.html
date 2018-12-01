@@ -2,11 +2,60 @@
 <html>
 <head>
 <style>
-body{
-  background-color:  rgb(23,23,40) ;
+html,body{
+  background-color:  #10101C ;
+  font-family: Courier;
+}
+.Info{
+  border-style: inset;
+  border-color: #171429;
+  border-radius: 5px;
+  float: right;
+  height:100vh;
+  width:19vw;
+  background-color: #171727;
+  color: rgb(253, 255, 223);
+  text-align: center;
+}
+
+.Action{
+  border-style: inset;
+  border-color: #171429;
+  height:30vh;
+  border-radius: 5px;
+  width:80vw;
+  background-color: #171727;
+
+
+}
+.info-data{
+  margin-top: 2vh;
+  margin-left: 1vw;
 }
 </style>
-<canvas id="nba"></canvas>
+
+<div style="width: 100vw; height: 70vh">
+  <div class="chart-container" style="float: left; height:40vh; width:80vw">
+  <canvas id="nba"></canvas>
+  </div>
+  <div class="Info">
+    <div class="info-data">
+    <h1>Info</h1>
+    <p>______<..>______
+    </p>
+    <p>Time</p> <p id="time" style="color:rgb(242, 233, 33)">...</p>
+    <p>Current Price</p><p id="price" style="color:rgb(242, 233, 33)">...</p>
+    <p>Local Maxima</p><p id="max" style="color:rgb(242, 233, 33)">...</p>
+    <p>df Maxima</p><p id="dfmax" style="color:rgb(242, 233, 33)">...</p>
+    <p>Local Minima</p><p id="min" style="color:rgb(242, 233, 33)">...</p>
+    <p>df Minima</p><p id="dfmin" style="color:rgb(242, 233, 33)">...</p>
+  </div>
+
+  </div>
+</div>
+  <div class="Action">
+    <h>Action</h>
+  </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
@@ -24,10 +73,11 @@ let chart = new Chart(ctx, {
         datasets: [{
             label: "BTC/USDT",
             borderColor: 'rgb(242, 233, 33)',
-            pointRadius: 5,
+            borderWidth: 2,
+            pointRadius: 3,
             pointBorderColor: 'rgb( 33, 214, 242 )',
             pointBorderWidth: 2,
-            pointHoverRadius: 11,
+            pointHoverRadius: 8,
             pointHoverBackgroundColor: 'rgb( 189, 240, 233, 0.5)',
             data: [],
         }]
@@ -71,6 +121,14 @@ let addData=(chart, label, data)=>{
     chart.update();
 }
 
+let removeData=(chart)=>{
+    chart.data.labels.shift();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.shift();
+    });
+    chart.update();
+}
+
 </script>
 
 </head>
@@ -79,13 +137,28 @@ let addData=(chart, label, data)=>{
 
    <script>
       let socket = io.connect('http://localhost:8989');
-      socket.on('price_set', (data)=>{
+      socket.on('info', (data)=>{
         addData(chart,data.time,data.price);
+        if(chart.data.labels.length>=30)
+          removeData(chart);
         //alert(`Logging from html document: ${data.time}: ${data.price}`);
+
+        document.getElementById("time").innerHTML = data.time;
+        document.getElementById("price").innerHTML = data.price;
+        document.getElementById("max").innerHTML = data.maxima;
+        document.getElementById("dfmax").innerHTML = data.df_max;
+        document.getElementById("min").innerHTML = data.minima;
+        document.getElementById("dfmin").innerHTML = data.df_min;
+
+
+
+
+
       });
    </script>
 
 <body>
+
 
 </body>
 </html>

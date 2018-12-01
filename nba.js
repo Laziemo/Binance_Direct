@@ -71,7 +71,7 @@ to move up again by > _delta, at which point, we buy.
 
 let track = (ticker,socket)=>{
   try{
-    cron.schedule('*/0.5 * * * * *', () => {
+    cron.schedule('*/5 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${price}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -86,12 +86,10 @@ let track = (ticker,socket)=>{
         const time_fmt = `${h}:${m}:${s}`;
         const p_current = body.price;
 
-        const price_set={
-          time: time_fmt,
-          price: p_current
-        };
+
 //SEND MESSAGE
-        socket.emit('price_set', price_set);
+
+
 
         console.log(`${present}:\n`);
 
@@ -167,13 +165,25 @@ let track = (ticker,socket)=>{
         //set previous value for nek round = current values of this round;
 
 
-        console.log(`Current:${p_current}`);
-        console.log(`Previous:${p_previous}`);
-        //console.log(`Difference/Highest:${df_highest}%`);
-        //console.log(`Difference/Lowest:${df_lowest}%`);
-        console.log(`df_Current:${df_current}%`);
-        console.log(`df_Previous:${df_previous}%`);
-        console.log(`-----------------------<._.>-----------------------`);
+        const info_set={
+          time: time_fmt,
+          price: p_current,
+          maxima: p_highest,
+          minima: p_lowest,
+          df_max: df_highest,
+          df_min: df_lowest
+        };
+
+        socket.emit('info', info_set);
+        
+        //
+        // console.log(`Current:${p_current}`);
+        // console.log(`Previous:${p_previous}`);
+        // //console.log(`Difference/Highest:${df_highest}%`);
+        // //console.log(`Difference/Lowest:${df_lowest}%`);
+        // console.log(`df_Current:${df_current}%`);
+        // console.log(`df_Previous:${df_previous}%`);
+        // console.log(`-----------------------<._.>-----------------------`);
 
         p_previous = p_current;
         if(df_current!==zero){
