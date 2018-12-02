@@ -1,0 +1,214 @@
+<html>
+<head>
+<style>
+html,body{
+  background-color:  #10101C ;
+  font-family: Courier;
+}
+#btc img {
+    display: block;
+    height: 55px;
+    width: 50px;
+}
+.Info{
+  border-style: inset;
+  border-color: #171429;
+  border-radius: 5px;
+  float: right;
+  height:100vh;
+  width:19vw;
+  background-color: #171727;
+  color: rgb(253, 255, 223);
+  text-align: center;
+}
+
+.Action{
+  border-style: inset;
+  border-color: #171429;
+  height:30vh;
+  border-radius: 5px;
+  width:80vw;
+  background-color: #171727;
+  color: rgb(253, 255, 223);
+  text-align: center;
+
+}
+.info-data{
+  margin-top: 2vh;
+  margin-left: 1vw;
+}
+.action-data{
+  margin-top: 2vh;
+  margin-left: 0vw;
+}
+</style>
+
+<div style="width: 100vw; height: 70vh">
+  <div class="chart-container" style="float: left; height:40vh; width:80vw">
+  <canvas id="nba"></canvas>
+  </div>
+  <div class="Info">
+    <div class="info-data">
+    <h1>Info</h1>
+    <p>______<..>______
+    </p>
+    <p>Time</p>      <p id="time" style="color:rgb( 33, 214, 242 )">...</p>
+    <p>Bid</p>       <p id="bid" style="color:#9af841; font-size: 1.5em">...</p>
+    <p>Bid Volume</p><p id="bid_qt" style="color: rgb(242, 233, 33) ">...</p>
+    <p>Ask</p>       <p id="ask" style="color: #ef342b; font-size: 1.5em ">...</p>
+    <p>Ask Volume</p><p id="ask_qt" style="color:  rgb(242, 233, 33) ">...</p>
+    <p>Spread</p>    <p id="spread" style="color: rgb( 78, 75, 255 ) ">...</p>
+  </div>
+
+  </div>
+</div>
+  <div class="Action">
+    <div class="action-data">
+      <h1>Markets</h1>
+        <input id="btc" type="image" style="margin-right: 10px"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAEoklEQVRogd1aT2gcVRh/lxxMepo3bxfWBItCDt70YnoTUXvwsEGEipomgpBWyM2bKXj2Ius/ioKUgBgCksJS5r3ZNLXV/tEkTW2iIC5N2zQkld2EbpvNzPfmzedhdrOZ7SbmzU52qR/8LsPufL/fe997833fe4TEYJhNdbqC9oOgGcdi3OUsDzxRBGECCBOAJ4ouZ3nHYhwEzbiC9mM21RmH7+ikJ4gBNh2SnJ4FwcogGGqiLDk9CzYdwglitJL4IWkbp4CbpQikG4ObJWmxURwjXQdHfJZ0ONw8AYKtxUa8Dg5nqw43T+As6YiVfFEYPS435w6KeD1cbs4VhdETC3mZNY4c5KjvgbVyLtnXFHngiQHgCbcN5CtrgznAEwPRybeLeB22bPqeFvlyLtnX1pFvMBP7DqeiMHp0Y17O9KNa+QHVyjjKubeD51OHUd3+GtXKOKqlLxByTze9Jv5zYeMs6Yiy2/jFS1g1/8F8IOr6u7jT5K9vND0TLjfn9txiK/u89ov99cs1AaVFBMHQmz8eFjDTH0s4ObY53Hj0J8ghndCRV15BlCXUNlhHtZZF7/cPEHLd+gI4W234xZa2cUrnRd7CiD75OvM38yivvqotQlpstH70DRDsodZLLr2I/vpl9EuLiN5mjZVy0C8t7oI/EN1/6mZkA+UvR/REcLMUSgDBpkPNxGWjNbA7EijnjiHCRk3z/XP6fi06WAufICVukYBKCM4PhCdiulcvjDidDMInm+qEaPl8UwJg6hlE39v+n7x2VNdvGbOpThJUUtHJRxYgGCKs1wRUP4AacHkyTUDQTFsEXHg+FELy6msRfNMMCerUVgtIoLp7Zgf7h5FSDYczi7ic5VspQF58AdXd70Kj7/31SSS/Lmd5EnQP4hOAPqBfXm6MrWVEX+34rUJ1+zSCnYrqu0CC1keMAnTMe4Tejfej++YJN34BvkKUD/YG+iEd6tZnTQiIOYT2tYine1Hd+z48GTeGooVQqxdxDQn0Cz/VFMA6wvlntfy6nOXbtI0GkL+lw7Ow8KGWX4czq30fMsEQzj8XXgtLX2r6ppm2phJgJxGVWxOwfEYzhJLp9iVzgqG88nI4hPKf6vgtb3e425FOQ6471AxARJQzb+5ffDWdbn1Bw1D+3Id+4WKIvL+5pPdF3lnQ4AQxtNvl072o7nyDamU8XCbCRtAL2gX1xCv0UV5/Z/++60vKSEX9zZMNiEQw30Pvz4+0Zvyxop4QQnCMdIFGW8WbH2yWOfqFCyivva5Ffte2inZjy06hN38cvYUR9B/9XaO1dQ+9hRFUd74N0VW3PkdvYQS9mydRzr6lXQNvC9itsUXI/6C1SEgczd1jwfOpw6iWvoqtuetwtlr+8anuPclXLWivM6fZEYsNnDnlc/SlfZGv2hN9wBES0eYjpsjkq1bOJft010RMaP6Qr2pP9DFr1XCWdDi2OexwtnpQxB3OVh3bHI79oDskZIx0SYuNxn7VQLCPD/SqwWNCJogBFh2UnE5C9Msek2DRwZZe9mgoJpvqdHkyDYJmHM6sSqOgADzhVnaxgstZ3uHMAkEzLk+m47pu8y+lT355wMYmtwAAAABJRU5ErkJggg==" alt="BTC" onclick="start_btc()">
+
+        <input id="ada" type="image" style="margin-right: 10px"  src="data:image/png;base64,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" onclick="start_ada()">
+
+        <input id="etc" type="image" style="margin-right: 10px"  src="data:image/png;base64,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" alt="ETC" onclick="start_etc()">
+
+     </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+let ctx = document.getElementById('nba').getContext('2d');
+Chart.defaults.global.defaultFontFamily = 'Courier';
+Chart.defaults.global.defaultFontColor = 'rgb(253, 255, 223)';
+
+let chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+    // The data for our dataset
+    data: {
+        labels: [],
+        datasets: [
+        {
+            label: "Ask",
+            yAxesGroup: "A",
+            borderColor: 'rgb(  255, 75, 75 , 0.3 )',
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: 'rgb( 255, 83, 75 )',
+            pointBorderWidth: 2,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: 'rgb( 189, 240, 233, 0.5)',
+            data: [],
+        },
+        {
+            label: "Bid",
+            yAxesGroup: "B",
+            borderColor: 'rgb(  146, 255, 75 , 0.3  )',
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: 'rgb( 146, 255, 75 )',
+            pointBorderWidth: 2,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: 'rgb( 189, 240, 233, 0.5)',
+            data: [],
+        }
+        ]
+    },
+    // Configuration options go here
+    options: {
+        scales: {
+            yAxes: [{
+                scaleLabel:{
+                  display:true,
+                  labelString: "USDT",
+                  fontColor: 'rgb( 33, 214, 242 )',
+                  fontSize: 21
+
+                }
+            }],
+            xAxes: [{
+                scaleLabel:{
+                  display:false,
+                  labelString: "time",
+                  fontColor: 'rgb( 33, 214, 242 )',
+                  fontSize: 21
+
+                }
+            }]
+        },
+        title: {
+            display: true,
+            text: '',
+            fontColor: 'rgb( 251, 254, 194 )',
+            fontFamily: "Courier",
+            fontSize: 27
+
+        }
+    }
+});
+
+let addData=(chart, data)=>{
+    chart.data.labels.push(data.time);
+    chart.data.datasets[0].data.push(data.ask);
+    chart.data.datasets[1].data.push(data.bid);
+    chart.update();
+}
+
+let removeData=(chart)=>{
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+    chart.data.datasets[1].data.shift();
+    chart.update();
+}
+
+
+
+</script>
+
+</head>
+
+   <script src = "/socket.io/socket.io.js"></script>
+
+   <script>
+      let socket = io.connect('http://localhost:8989');
+
+      let stop = ()=>{
+        socket.emit('stop');
+      }
+      let start_btc = ()=>{
+        socket.emit('start_btc');
+        chart.options.title.text='Live market monitor: BTC/USDT (Binance)';
+        //alert("Tracking BTC/USDT");
+      }
+      let start_ada = ()=>{
+        socket.emit('start_ada');
+        chart.options.title.text='Live market monitor: ADA/USDT (Binance)';
+        //alert("Tracking ADA/USDT");
+      }
+      let start_etc = ()=>{
+        socket.emit('start_etc');
+        chart.options.title.text='Live market monitor: ETC/USDT (Binance)';
+        //alert("Tracking ETC/USDT");
+      }
+
+      socket.on('info', (data)=>{
+        addData(chart,data);
+        if(chart.data.labels.length>=90)
+          removeData(chart);
+        //alert(`Logging from html document: ${data.time}: ${data.bid}`);
+
+        document.getElementById("time").innerHTML = data.time;
+        document.getElementById("bid").innerHTML = data.bid;
+        document.getElementById("bid_qt").innerHTML = data.bid_qt;
+        document.getElementById("ask").innerHTML = data.ask;
+        document.getElementById("ask_qt").innerHTML = data.ask_qt;
+        document.getElementById("spread").innerHTML = data.spread;
+
+      });
+   </script>
+
+<body>
+
+
+</body>
+</html>

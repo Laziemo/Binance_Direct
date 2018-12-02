@@ -44,10 +44,10 @@ html,body{
     <p>______<..>______
     </p>
     <p>Time</p> <p id="time" style="color:rgb(242, 233, 33)">...</p>
-    <p>Current Price</p><p id="price" style="color:rgb(242, 233, 33)">...</p>
-    <p>Local Maxima</p><p id="max" style="color:rgb(242, 233, 33)">...</p>
+    <p>Current Price</p><p id="price" style="color:rgb( 33, 214, 242 ); font-size: 28">...</p>
+    <p>Local Maxima</p><p id="max" style="color: #9af841 ">...</p>
     <p>df Maxima</p><p id="dfmax" style="color:rgb(242, 233, 33)">...</p>
-    <p>Local Minima</p><p id="min" style="color:rgb(242, 233, 33)">...</p>
+    <p>Local Minima</p><p id="min" style="color: #ef342b ">...</p>
     <p>df Minima</p><p id="dfmin" style="color:rgb(242, 233, 33)">...</p>
   </div>
 
@@ -55,6 +55,8 @@ html,body{
 </div>
   <div class="Action">
     <h>Action</h>
+     <button type="button" onclick="stop()">Stop</button>
+     <button type="button" onclick="start()">Start</button>
   </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -73,8 +75,8 @@ let chart = new Chart(ctx, {
         datasets: [{
             label: "BTC/USDT",
             borderColor: 'rgb(242, 233, 33)',
-            borderWidth: 2,
-            pointRadius: 3,
+            borderWidth: 1,
+            pointRadius: 2,
             pointBorderColor: 'rgb( 33, 214, 242 )',
             pointBorderWidth: 2,
             pointHoverRadius: 8,
@@ -129,6 +131,8 @@ let removeData=(chart)=>{
     chart.update();
 }
 
+
+
 </script>
 
 </head>
@@ -137,9 +141,17 @@ let removeData=(chart)=>{
 
    <script>
       let socket = io.connect('http://localhost:8989');
+
+      let stop = ()=>{
+        socket.emit('stop');
+      }
+      let start = ()=>{
+        socket.emit('start',socket);
+      }
+
       socket.on('info', (data)=>{
         addData(chart,data.time,data.price);
-        if(chart.data.labels.length>=30)
+        if(chart.data.labels.length>=90)
           removeData(chart);
         //alert(`Logging from html document: ${data.time}: ${data.price}`);
 
@@ -149,10 +161,6 @@ let removeData=(chart)=>{
         document.getElementById("dfmax").innerHTML = data.df_max;
         document.getElementById("min").innerHTML = data.minima;
         document.getElementById("dfmin").innerHTML = data.df_min;
-
-
-
-
 
       });
    </script>

@@ -14,6 +14,11 @@ let p_lowest = parseFloat(20000.00000000);
 let p_previous = zero;
 let df_previous = parseFloat(0.000000000);
 
+let bid_current = zero;
+let ask_current  = zero;
+let bid_qt_current = zero;
+let ask_qt_current = zero;
+
 let direction_changed = false;
 //direction_changed becomes true only at the point of change in direction
 //whenever direction_changed we start adding df_current to delta_sum
@@ -34,6 +39,7 @@ const binance = "https://api.binance.com";
 const exchangeInfo = "/api/v1/exchangeInfo";
 const time = "/api/v1/time";
 const price = "/api/v3/ticker/price";
+const best_bid_ask = "/api/v3/ticker/bookTicker"
 
 let options = {
   method: "",
@@ -71,7 +77,7 @@ to move up again by > _delta, at which point, we buy.
 
 let track = (ticker,socket)=>{
   try{
-    cron.schedule('*/5 * * * * *', () => {
+    let task =cron.schedule('*/1 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${price}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -79,18 +85,20 @@ let track = (ticker,socket)=>{
           throw error;
         }
         //get time and price
+//         {
+//   "symbol": "LTCBTC",
+//   "bidPrice": "4.00000000",
+//   "bidQty": "431.00000000",
+//   "askPrice": "4.00000200",
+//   "askQty": "9.00000000"
+// }
         const present = new Date();
         const h = present.getHours();
         const m = present.getMinutes();
         const s = present.getSeconds();
         const time_fmt = `${h}:${m}:${s}`;
+
         const p_current = body.price;
-
-
-//SEND MESSAGE
-
-
-
         console.log(`${present}:\n`);
 
         //compare to atl and ath
@@ -109,6 +117,17 @@ let track = (ticker,socket)=>{
         const df_lowest = ((p_current-p_lowest)/p_lowest) * 100;
 
         const df_current = ((p_current-p_previous)/p_previous) * 100;
+
+        const info_set={
+          time: time_fmt,
+          price: p_current,
+          maxima: p_highest,
+          minima: p_lowest,
+          df_max: df_highest,
+          df_min: df_lowest
+        };
+
+        socket.emit('info', info_set);
 //---------------------------
 //Main conditionals
 //---------------------------
@@ -164,18 +183,6 @@ let track = (ticker,socket)=>{
         }
         //set previous value for nek round = current values of this round;
 
-
-        const info_set={
-          time: time_fmt,
-          price: p_current,
-          maxima: p_highest,
-          minima: p_lowest,
-          df_max: df_highest,
-          df_min: df_lowest
-        };
-
-        socket.emit('info', info_set);
-        
         //
         // console.log(`Current:${p_current}`);
         // console.log(`Previous:${p_previous}`);
@@ -189,7 +196,50 @@ let track = (ticker,socket)=>{
         if(df_current!==zero){
           df_previous = df_current;
         }
+      });
+    },{scheduled: true});
+    // let start=()=>{
+    //   task.start();
+    //   console.log("Task has been scheduled");
+    // }
+  }
+  catch(e){
+    console.log(`Error: ${e}`);
+  }
+}
+//===f(x)-=====================================================================|
+let track_ab = (ticker,io)=>{
+  try{
+    let task =cron.schedule('*/1 * * * * *', () => {
+      options.method = "GET";
+      options.url = `${binance}${best_bid_ask}?symbol=${ticker}`;
+      request(options,(error,response,body)=>{
+        if(error){
+          throw error;
+        }
 
+        const present = new Date();
+        const h = present.getHours();
+        const m = present.getMinutes();
+        const s = present.getSeconds();
+        const time_fmt = `${h}:${m}:${s}`;
+
+        bid_current = body.bidPrice;
+        bid_qt_current = body.bidQty;
+        ask_current = body.askPrice;
+        ask_qt_current = body.askQty;
+        const spread = ask_current - bid_current;
+
+        const info_set={
+          time: time_fmt,
+          ask: ask_current,
+          ask_qt: ask_qt_current,
+          bid: bid_current,
+          bid_qt: bid_qt_current,
+          spread: spread
+        };
+
+        io.sockets.emit('info', info_set);
       });
     });
   }
@@ -198,6 +248,8 @@ let track = (ticker,socket)=>{
   }
 }
 //===f(x)-=====================================================================|
+
+
 let buy = (time,price) =>{
   try{
     if(muh_usdt>zero){
@@ -252,5 +304,5 @@ let sell = (time,price) =>{
 //===Socket=====-==============================================================|
 //-<.TRACK.>==================================================================~|
 //track("BTCUSDT");
-module.exports={track};
+module.exports={track,track_ab};
 //-<..>=======================================================================~|

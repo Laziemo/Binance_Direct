@@ -14,12 +14,26 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/', (req, res)=>{
-  res.sendFile('/Users/theliz/Documents/ThroughBit/Development/Bots/Binance_Direct/index.html');
+  res.sendFile('/Users/theliz/Documents/ThroughBit/Development/Bots/Binance_Direct/index_ab.html');
 });
 
 io.sockets.on('connection', (socket)=>{
-    // When the client connects, they are sent a message
-    nba.track("BTCUSDT",socket)
+    console.log("Socket connection established.")
+    //nba.track_ab("BTCUSDT",socket);
+    let tracker;
+    socket.on('start_btc', ()=>{
+      nba.track_ab("BTCUSDT",io);
+      console.log("Tracking BTC/USDT...");
+    });
+    socket.on('start_ada', ()=>{
+      nba.track_ab("ADAUSDT",io);
+      console.log("Tracking DGB/USDT...");
+    });
+    socket.on('start_etc', ()=>{
+      nba.track_ab("ETCUSDT",io);
+      console.log("Tracking ETC/USDT...");
+    });
+
     // When a "message" is received (click on the button), it's logged in the console
 });
 //-<..>=======================================================================~|
