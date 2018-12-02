@@ -6,9 +6,20 @@ Binance direct is a market monitor bot that communicates with Binance exchange's
 regarding current best ask/bid prices and volumes at these prices.
 
 The end result is to create a customized trading dashboard to monitior prices every second and integrate private
-api access to allow either automated trading by given rules OR cutomized parameters for faster manual trade execution and cancellation. 
+api access to allow either automated trading by given rules OR cutomized parameters for faster manual trade execution and cancellation.
 
-### Bugs
+### Usage
+
+          git clone https://github.com/Laziemo/Binance_Direct.git
+          cd Binance_Direct
+          npm install
+          npm install pm2@latest -g
+          pm2 start server.js --watch (use pm2 monit on another screen to monitor logs)
+
+
+**Live monitor hosted at: http://localhost:8989**
+
+### Upgrades
 
 * Methods to start() & stop() cron.schedule:
 
@@ -23,3 +34,5 @@ api access to allow either automated trading by given rules OR cutomized paramet
   *A worthy upgrade would integrate a start() and stop() method to manage these cron schedules.*
 
 * Develop a 3D chart extension feature to show market depth.
+
+#### Support : please email zenchan@protonmail.com for bug reports and/or queries
