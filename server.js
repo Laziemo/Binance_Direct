@@ -19,10 +19,11 @@ app.get('/', (req, res)=>{
 
 io.sockets.on('connection', (socket)=>{
     console.log("Socket connection established.")
-    //nba.track_ab("BTCUSDT",socket);
-    let tracker;
+    //nba.track_ab("BTCUSDT",socket).start();
+    //let tracker = new nba.track_ab("BTCUSDT",socket);
     socket.on('start_btc', ()=>{
       nba.track_ab("BTCUSDT",io);
+      //tracker.start();
       console.log("Tracking BTC/USDT...");
     });
     socket.on('start_ada', ()=>{

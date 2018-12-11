@@ -197,7 +197,7 @@ let track = (ticker,socket)=>{
           df_previous = df_current;
         }
       });
-    },{scheduled: true});
+    },{scheduled: false});
     // let start=()=>{
     //   task.start();
     //   console.log("Task has been scheduled");
@@ -210,7 +210,7 @@ let track = (ticker,socket)=>{
 //===f(x)-=====================================================================|
 let track_ab = (ticker,io)=>{
   try{
-    let task =cron.schedule('*/1 * * * * *', () => {
+    let task = cron.schedule('*/5 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${best_bid_ask}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -241,12 +241,17 @@ let track_ab = (ticker,io)=>{
 
         io.sockets.emit('info', info_set);
       });
-    });
+    },true);
   }
   catch(e){
     console.log(`Error: ${e}`);
   }
 }
+//*****************************************************************************!
+// track_ab.prototype.start = ()=>{
+//   task.start();
+//   console.log("Started!");
+// }
 //===f(x)-=====================================================================|
 
 

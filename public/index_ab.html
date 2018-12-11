@@ -16,7 +16,7 @@ html,body{
   border-radius: 5px;
   float: right;
   height:100vh;
-  width:19vw;
+  width:23vw;
   background-color: #171727;
   color: rgb(253, 255, 223);
   text-align: center;
@@ -27,7 +27,7 @@ html,body{
   border-color: #171429;
   height:30vh;
   border-radius: 5px;
-  width:80vw;
+  width:77vw;
   background-color: #171727;
   color: rgb(253, 255, 223);
   text-align: center;
@@ -44,19 +44,19 @@ html,body{
 </style>
 
 <div style="width: 100vw; height: 70vh">
-  <div class="chart-container" style="float: left; height:40vh; width:80vw">
+  <div class="chart-container" style="float: left; height:40vh; width:76vw">
   <canvas id="nba"></canvas>
   </div>
   <div class="Info">
     <div class="info-data">
-    <h1>Info</h1>
+    <h1 id="market"></h1>
     <p>______<..>______
     </p>
-    <p>Time</p>      <p id="time" style="color:rgb( 33, 214, 242 )">...</p>
-    <p>Bid</p>       <p id="bid" style="color:#9af841; font-size: 1.5em">...</p>
-    <p>Bid Volume</p><p id="bid_qt" style="color: rgb(242, 233, 33) ">...</p>
-    <p>Ask</p>       <p id="ask" style="color: #ef342b; font-size: 1.5em ">...</p>
+    <p>Time</p>      <p id="time" style="color:rgb( 33, 214, 242 ); font-size: 2.3em">...</p>
+    <p>Ask</p>       <p id="ask" style="color: #ef342b; font-size: 2.3em ">...</p>
     <p>Ask Volume</p><p id="ask_qt" style="color:  rgb(242, 233, 33) ">...</p>
+    <p>Bid</p>       <p id="bid" style="color:#9af841; font-size: 2.3em">...</p>
+    <p>Bid Volume</p><p id="bid_qt" style="color: rgb(242, 233, 33) ">...</p>
     <p>Spread</p>    <p id="spread" style="color: rgb( 78, 75, 255 ) ">...</p>
   </div>
 
@@ -93,7 +93,7 @@ let chart = new Chart(ctx, {
             yAxesGroup: "A",
             borderColor: 'rgb(  255, 75, 75 , 0.3 )',
             borderWidth: 1,
-            pointRadius: 2,
+            pointRadius: 1,
             pointBorderColor: 'rgb( 255, 83, 75 )',
             pointBorderWidth: 2,
             pointHoverRadius: 8,
@@ -105,7 +105,7 @@ let chart = new Chart(ctx, {
             yAxesGroup: "B",
             borderColor: 'rgb(  146, 255, 75 , 0.3  )',
             borderWidth: 1,
-            pointRadius: 2,
+            pointRadius: 1,
             pointBorderColor: 'rgb( 146, 255, 75 )',
             pointBorderWidth: 2,
             pointHoverRadius: 8,
@@ -138,7 +138,7 @@ let chart = new Chart(ctx, {
         },
         title: {
             display: true,
-            text: '',
+            text: 'Live market monitor: (Binance)',
             fontColor: 'rgb( 251, 254, 194 )',
             fontFamily: "Courier",
             fontSize: 27
@@ -177,23 +177,23 @@ let removeData=(chart)=>{
       }
       let start_btc = ()=>{
         socket.emit('start_btc');
-        chart.options.title.text='Live market monitor: BTC/USDT (Binance)';
+        document.getElementById("market").innerHTML = "BTC/USDT";
         //alert("Tracking BTC/USDT");
       }
       let start_ada = ()=>{
         socket.emit('start_ada');
-        chart.options.title.text='Live market monitor: ADA/USDT (Binance)';
+        document.getElementById("market").innerHTML = "ADA/USDT";
         //alert("Tracking ADA/USDT");
       }
       let start_etc = ()=>{
         socket.emit('start_etc');
-        chart.options.title.text='Live market monitor: ETC/USDT (Binance)';
+        document.getElementById("market").innerHTML = "ETC/USDT";
         //alert("Tracking ETC/USDT");
       }
 
       socket.on('info', (data)=>{
         addData(chart,data);
-        if(chart.data.labels.length>=90)
+        if(chart.data.labels.length>=180)
           removeData(chart);
         //alert(`Logging from html document: ${data.time}: ${data.bid}`);
 
