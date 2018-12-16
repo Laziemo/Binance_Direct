@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/', (req, res)=>{
-  res.sendFile(`${home}/Binance_Direct/public/index_ab.html`);
+  res.sendFile(`${home}/Bots/Binance_Direct/public/index_ab.html`);
 });
 
 io.sockets.on('connection', (socket)=>{
