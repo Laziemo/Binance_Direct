@@ -193,7 +193,7 @@ let removeData=(chart)=>{
 
       socket.on('info', (data)=>{
         addData(chart,data);
-        if(chart.data.labels.length>=180)
+        if(chart.data.labels.length>=150)
           removeData(chart);
         //alert(`Logging from html document: ${data.time}: ${data.bid}`);
 
