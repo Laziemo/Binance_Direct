@@ -171,7 +171,8 @@ let removeData=(chart)=>{
 
    <script>
       let socket = io.connect('http://localhost:8989');
-
+  
+     /*
       let stop = ()=>{
         socket.emit('stop');
       }
@@ -190,7 +191,8 @@ let removeData=(chart)=>{
         document.getElementById("market").innerHTML = "ETC/USDT";
         //alert("Tracking ETC/USDT");
       }
-
+      */
+     
       socket.on('info', (data)=>{
         addData(chart,data);
         if(chart.data.labels.length>=150)
@@ -198,10 +200,10 @@ let removeData=(chart)=>{
         //alert(`Logging from html document: ${data.time}: ${data.bid}`);
 
         document.getElementById("time").innerHTML = data.time;
-        document.getElementById("bid").innerHTML = data.bid;
-        document.getElementById("bid_qt").innerHTML = data.bid_qt;
         document.getElementById("ask").innerHTML = data.ask;
         document.getElementById("ask_qt").innerHTML = data.ask_qt;
+        document.getElementById("bid").innerHTML = data.bid;
+        document.getElementById("bid_qt").innerHTML = data.bid_qt;
         document.getElementById("spread").innerHTML = data.spread;
 
       });
