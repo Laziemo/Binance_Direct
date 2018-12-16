@@ -218,7 +218,7 @@ let track = (ticker,socket)=>{
 //===f(x)-=====================================================================|
 let track_ab = (ticker,io)=>{
   try{
-    let task = cron.schedule('*/5 * * * * *', () => {
+    let task = cron.schedule('*/1 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${best_bid_ask}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -227,6 +227,12 @@ let track_ab = (ticker,io)=>{
         }
 
         const present = new Date();
+        
+        lifetime --;
+        if(lifetime === zero){
+          task.stop();
+        }
+
         const h = present.getHours();
         const m = present.getMinutes();
         const s = present.getSeconds();
