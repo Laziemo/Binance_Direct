@@ -19,6 +19,9 @@ app.get('/', (req, res)=>{
 
 io.sockets.on('connection', (socket)=>{
     console.log("Socket connection established.")
+    nba.track_ab("BTCUSDT",socket);
+    /*
+  
     //nba.track_ab("BTCUSDT",socket).start();
     //let tracker = new nba.track_ab("BTCUSDT",socket);
     socket.on('start_btc', ()=>{
@@ -34,7 +37,7 @@ io.sockets.on('connection', (socket)=>{
       nba.track_ab("ETCUSDT",io);
       console.log("Tracking ETC/USDT...");
     });
-
+*/
     // When a "message" is received (click on the button), it's logged in the console
 });
 //-<..>=======================================================================~|
