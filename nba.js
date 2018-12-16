@@ -255,7 +255,7 @@ let track_ab = (ticker,io)=>{
 
         io.sockets.emit('info', info_set);
       });
-    });
+    },{scheduled: true});
   }
   catch(e){
     console.log(`Error: ${e}`);
