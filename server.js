@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
 
+const home = process.env.HOME;
+
 const nba = require('./nba');
 
 app.use(helmet());
@@ -14,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/', (req, res)=>{
-  res.sendFile('/Users/theliz/Documents/ThroughBit/Development/Bots/Binance_Direct/public/index_ab.html');
+  res.sendFile(`${home}/Binance_Direct/public/index_ab.html`);
 });
 
 io.sockets.on('connection', (socket)=>{
