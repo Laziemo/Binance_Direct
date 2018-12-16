@@ -79,7 +79,7 @@ to move up again by > _delta, at which point, we buy.
 
 let track = (ticker,socket)=>{
   try{
-    let task =cron.schedule('*/1 * * * * *', () => {
+    cron.schedule('*/1 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${price}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -96,10 +96,7 @@ let track = (ticker,socket)=>{
 // }
         const present = new Date();
         
-        lifetime --;
-        if(lifetime === zero){
-          task.stop();
-        }
+
         
         const h = present.getHours();
         const m = present.getMinutes();
@@ -205,7 +202,7 @@ let track = (ticker,socket)=>{
           df_previous = df_current;
         }
       });
-    },{scheduled: true});
+    });
     // let start=()=>{
     //   task.start();
     //   console.log("Task has been scheduled");
@@ -218,7 +215,7 @@ let track = (ticker,socket)=>{
 //===f(x)-=====================================================================|
 let track_ab = (ticker,io)=>{
   try{
-    let task = cron.schedule('*/1 * * * * *', () => {
+    cron.schedule('*/1 * * * * *', () => {
       options.method = "GET";
       options.url = `${binance}${best_bid_ask}?symbol=${ticker}`;
       request(options,(error,response,body)=>{
@@ -228,10 +225,7 @@ let track_ab = (ticker,io)=>{
 
         const present = new Date();
         
-        lifetime --;
-        if(lifetime === zero){
-          task.stop();
-        }
+       
 
         const h = present.getHours();
         const m = present.getMinutes();
@@ -255,7 +249,7 @@ let track_ab = (ticker,io)=>{
 
         io.sockets.emit('info', info_set);
       });
-    },{scheduled: true});
+    });
   }
   catch(e){
     console.log(`Error: ${e}`);
