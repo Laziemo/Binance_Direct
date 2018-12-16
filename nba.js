@@ -6,9 +6,11 @@ const fs = require('fs');
 //let io = require('socket.io');
 //const socket = require('socket')
 //-<..>=======================================================================~|
-
 const zero = parseFloat(0.00000000);
 //defining zero since JS sucks at floating point number comparison
+
+let lifetime = parseInt(100000);
+
 let p_highest = zero;
 let p_lowest = parseFloat(20000.00000000);
 let p_previous = zero;
@@ -93,6 +95,12 @@ let track = (ticker,socket)=>{
 //   "askQty": "9.00000000"
 // }
         const present = new Date();
+        
+        lifetime --;
+        if(lifetime === zero){
+          task.stop();
+        }
+        
         const h = present.getHours();
         const m = present.getMinutes();
         const s = present.getSeconds();
@@ -197,7 +205,7 @@ let track = (ticker,socket)=>{
           df_previous = df_current;
         }
       });
-    },{scheduled: false});
+    },{scheduled: true});
     // let start=()=>{
     //   task.start();
     //   console.log("Task has been scheduled");
