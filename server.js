@@ -21,7 +21,7 @@ app.get('/', (req, res)=>{
 
 io.sockets.on('connection', (socket)=>{
     console.log("Socket connection established.")
-    nba.track_ab("BTCUSDT",socket);
+    nba.track_ab("BTCUSDT",io);
     /*
   
     //nba.track_ab("BTCUSDT",socket).start();
