@@ -16,22 +16,21 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/', (req, res)=>{
-  res.sendFile(`${home}/Bots/Binance_Direct/public/index_ab.html`);
+  res.sendFile(`${home}/Binance_Direct/public/index_ab.html`);
 });
 
 io.sockets.on('connection', (socket)=>{
     console.log("Socket connection established.")
-    nba.track_ab("BTCUSDT",socket);
-    /*
-  
-    //nba.track_ab("BTCUSDT",socket).start();
-    //let tracker = new nba.track_ab("BTCUSDT",socket);
+   nba.track_ab("BTCUSDT",io  );
+
+//    nba.track_ab("BTCUSDT",socket).start();
+//    let tracker = new nba.track_ab("BTCUSDT",socket);
     socket.on('start_btc', ()=>{
-      nba.track_ab("BTCUSDT",io);
-      //tracker.start();
-      console.log("Tracking BTC/USDT...");
+      nba.track_ab("BTCUSDT",socket);
+ //     tracker.start();
+  //    console.log("Tracking BTC/USDT...");
     });
-    socket.on('start_ada', ()=>{
+ /*   socket.on('start_ada', ()=>{
       nba.track_ab("ADAUSDT",io);
       console.log("Tracking DGB/USDT...");
     });
